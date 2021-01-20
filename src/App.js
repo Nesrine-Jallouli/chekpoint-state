@@ -13,29 +13,37 @@ class App extends Component {
  
     constructor( props ){
         super( props )
-        this.state = { show : false , seconds: 0};
-        this.toggleDiv = this.toggleDiv.bind(this)
+        this.state = { show : false , seconds: 0, interval : null};
+        
     }
 
     toggleDiv = () => {
-        const { show } = this.state;
+        const { show,interval } = this.state;
         this.setState( { show : !show} )
         if (!show)
         {
-          this.interval = setInterval(() => {
-            this.setState(prevState => ({
-              seconds: prevState.seconds + 1
-            }));
-          }, 1000);
-        }
+            this.setState({ interval: setInterval(() => {
+            this.setState({seconds : this.state.seconds+1})
+            }, 1000)
+            
+        })}
         else 
         {
-          clearInterval(this.interval);
+          clearInterval(interval);
+          this.setState({seconds:0});
+          
         }
         
     }
- 
-
+ componentDidMount(){
+   console.log('component is monted')
+ }
+ componentDidUpdate(){
+   console.log('component is updated')
+ }
+componentWillUnmount(){
+  console.log('component is dead')
+}
     render() {
       if (this.state.show ) 
         {
@@ -47,7 +55,7 @@ class App extends Component {
                     <img src={chrono} alt="chronometre" width="40px"/> 
                     <button>{this.state.seconds}</button>
                   </div>
-                  <button onClick={ this.toggleDiv } class="btn btn-success">Cacher Profil</button>
+                  <button onClick={ this.toggleDiv } className="btn btn-success">Cacher Profil</button>
                   
                   { this.state.show && <h1>Hello {this.Persone.fullName}</h1> }
                   { this.state.show && <p>I'm from in {this.Persone.bio}</p>  }
@@ -62,7 +70,7 @@ class App extends Component {
         {
           return (
             <div className="container">
-               <button onClick={this.toggleDiv } class="btn btn-success"> Afficher Profil</button>
+               <button onClick={this.toggleDiv } className="btn btn-success"> Afficher Profil</button>
             </div>
             )
         }
